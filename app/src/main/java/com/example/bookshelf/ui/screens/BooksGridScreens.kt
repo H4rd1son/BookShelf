@@ -1,5 +1,7 @@
 package com.example.bookshelf.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -51,6 +53,7 @@ fun BooksCard(
     modifier: Modifier = Modifier,
     onBookClicked: (Book) -> Unit
 ) {
+    val ctx = LocalContext.current //context? for what
     Card(
         modifier = modifier
             .padding(4.dp)
@@ -69,7 +72,9 @@ fun BooksCard(
                 )
             }
             AsyncImage(
-                modifier = modifier,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .requiredHeight(220.dp),
                 model = ImageRequest.Builder(context = LocalContext.current)
                     .data(book.imageLink?.replace("http", "https"))
                     .crossfade(true)
@@ -79,10 +84,17 @@ fun BooksCard(
                 contentDescription = stringResource(id = R.string.content_description),
                 contentScale = ContentScale.Crop
             )
-            Button(onClick = { onBookClicked(book) }) {
+            Button(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                onClick = { val urlIntent = Intent( //end setting this button
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.ya.ru")
+            )
+                ctx.startActivity(urlIntent) }) {
                 Text(text = stringResource(id = R.string.buy))
             }
-
         }
     }
 }
